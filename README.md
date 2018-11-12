@@ -29,6 +29,38 @@ three instances of a Human, then create an array called people of type [Human] w
 Human objects that you have initialized. Create a new array called sortedPeople of type [Human] 
 that is the people array sorted by age.
 </pre> 
+"""
+class Human: CustomStringConvertible, Equatable, Comparable {
+var name: String
+var age: Int
+var description: String {
+return "This person's name is: \(name) and this person age is: \(age)"
+}
+static func == (lhs: Human, rhs: Human) -> Bool {
+return lhs.name == rhs.name && lhs.age == rhs.age
+}
+static func < (lhs: Human, rhs: Human) -> Bool {
+return lhs.age < rhs.age
+}
+init(name: String, age: Int) {
+self.name = name
+self.age = age
+}
+}
+
+//Instances of humas
+let ash = Human.init(name: "Ash Ketchum", age: 10)
+let naruto = Human.init(name: "Naruto Uzumaki", age: 16)
+
+//comparing humans
+if ash == naruto {
+print("they are the same")
+} else {
+print("they are differnt")
+}
+//comparing the age of the these human
+let sortedPeople: [Human] = [ash,naruto].sorted{$0 < $1}
+"""
 
 </br> </br> 
 
@@ -41,12 +73,59 @@ type Int, and a function called drive().
 Define a Car struct that implements the Vehicle protocol. numberOfWheels should return a value of 4,
 and drive() should print "Vroom, vroom!" Create an instance of Car, print its number of wheels, 
 then call drive().
+"""
+protocol Vehicle {
+var numOfWheels: Int { get }
+func drive()
+}
 
+struct Car: Vehicle, CustomStringConvertible {
+
+var numOfWheels: Int {
+return 4
+}
+
+func drive() {
+print("Vroom, vroom!")
+}
+var description: String{
+return "This car has \(numOfWheels) and when you turn on the engine it goes \(drive())"
+}
+
+
+}
+
+let speedRacerCar = Car.init()
+print(speedRacerCar)
+
+"""
 Define a Bike struct that implements the Vehicle protocol. numberOfWheels should return a value of 2,
 and drive() should print "Begin pedaling!". Create an instance of Bike, print its number of wheels,
 then call drive().
 </pre>  
+"""
+struct Bike: Vehicle, CustomStringConvertible {
 
+var numOfWheels: Int {
+return 2
+}
+var description: String {
+return "This bike has \(numOfWheels)"
+}
+
+func drive() {
+print("Begin pedaling!")
+}
+
+
+}
+
+//instance
+let dirtBike = Bike.init()
+print(dirtBike)
+dirtBike.drive()
+
+"""
 </br> </br> 
 
 <pre> 
@@ -63,7 +142,58 @@ protocol Flyable {
  var airspeedVelocity: Double { get }
 }
 </pre> 
+"""
+protocol Bird {
+var name: String { get }
+var canFly: Bool { get }
+}
 
+protocol Flyable {
+var airspeedVelocity: Double { get }
+}
+
+struct Penguin: Bird, CustomStringConvertible {
+
+var name: String {
+return "Emperor penguin"
+}
+
+var canFly: Bool {
+return false
+}
+var description: String {
+return "The name of this bird is \(name): Can this bird fly? \(canFly)"
+}
+
+
+}
+
+struct Egale: Bird, Flyable, CustomStringConvertible {
+
+var name: String {
+return "Golden eagle"
+}
+
+var canFly: Bool {
+return true
+}
+
+var airspeedVelocity: Double {
+return 200.0
+}
+var description: String {
+return "This bird called: \(name): Are they able to fly? \(canFly). They have a air speed velocity of \(airspeedVelocity)mph"
+}
+
+
+}
+//Instances
+let empPenguin = Penguin.init()
+print(empPenguin)
+
+let goldenEgale = Egale.init()
+print(goldenEgale)
+"""
 </br> </br> 
 
 <pre>
@@ -87,7 +217,47 @@ bruceBanner.transform() . // hulk
 
 bruceBanner.transform()  // notHulk
 </pre> 
+"""
+protocol Transformation {
 
+mutating func transform()
+}
+enum SuperHero: String, Transformation {
+
+case peterParker
+case spiderMan
+case bruceBanner
+case hulk
+
+mutating func transform() {
+switch self {
+case .peterParker: self =  .spiderMan
+print("Not Spider-Man")//"Not Spider-Man"
+case .spiderMan: self = .peterParker
+print("Friendly Neighborhood Spider Man")//"Friendly Neighborhood Spider Man"
+case .bruceBanner: self = .hulk
+print("HULLLLLLLKKKKKKKKK SMAAAAAAAAASHHHHHHHHHHHHHHH!")
+case .hulk: self = .bruceBanner
+print("I am back to my normal self. I hope he didn't hurt anyone")
+}
+}
+}
+
+var peterByStanLee = SuperHero.peterParker
+
+peterByStanLee.transform()
+peterByStanLee.transform()
+
+var bruceByStanLee = SuperHero.bruceBanner
+bruceByStanLee.transform()
+bruceByStanLee.transform()
+
+
+protocol communication {
+
+}
+
+"""
 </br> </br> 
 
 <pre>
@@ -107,4 +277,43 @@ Question 5.
 // 7. Iterate over the array and have them print talk.
 </pre> 
 
+"""
+protocol Communication {
+var talk: String {get}
 
+
+}
+
+class Dog: Communication{
+var talk: String {
+return "The Dog goes: Woof!"
+}
+
+
+}
+class Cow: Communication{
+var talk: String {
+return "The Cow goes: Moo!"
+}
+
+
+}
+class Cat: Communication{
+var talk: String {
+return "The Cat goes: Meow!"
+}
+
+
+}
+
+
+let houseCat = Cat.init()
+let gaurdDog = Dog.init()
+let farmCow = Cow.init()
+
+let animals: [Communication] = [houseCat,gaurdDog,farmCow]
+
+for animal in animals {
+print(animal.talk)
+}
+"""
